@@ -37,6 +37,8 @@ By analysing differences in the application specification and in the monitored i
 
 ## Developers
 
-- [Giuseppe Bisicchia](https://github.com/GBisi)
 - [Stefano Forti](http://pages.di.unipi.it/forti/)
+- [Giuseppe Bisicchia](https://github.com/GBisi)
 - [Antonio Brogi](http://pages.di.unipi.it/brogi/)
+
+
