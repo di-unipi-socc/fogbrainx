@@ -37,7 +37,7 @@ By analysing differences in the application specification and in the monitored i
 
 # Collaborate
 
-We look forward to contributions and suggestions on how to improve FogBrain!
+We look forward to contributions and suggestions on how to improve FogBrainX!
 Feel free to drop us a message or a pull request.
 
 #### Developers & Contributors
