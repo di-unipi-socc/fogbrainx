@@ -25,5 +25,18 @@ Before using **FogBrainX** you need to install the latest stable release of [SWI
 
 ## Overview
 
-<p><img align="left"  src="https://raw.githubusercontent.com/di-unipi-socc/fogbrainx/main/img/functioning.png" width="850"> </p>
+The picture below illustrates the bird's-eye view of FogBrainX.
 
+<div><img align="center"  src="https://raw.githubusercontent.com/di-unipi-socc/fogbrainx/main/img/functioning.png" width="850"></div>
+
+By analysing differences in the application specification and in the monitored infrastructure data, FogBrainX outputs management decisions on where to place application services by incrementally handling: 
+
+- changes in the infrastructure (i.e. node resources, network QoS) that trigger the need for migrating one or more application services,
+- changes in the services' (software, hardware and IoT) requirements or in the service-service communication (latency and bandwidth) requirements, set in the application specification, that might trigger either the need for migrating one or more application services or for simply updating the current deployment information, and
+- addition or removal of services or of service-service communication requirements in the application specification.
+
+## Developers
+
+- [Giuseppe Bisicchia](https://github.com/GBisi)
+- [Stefano Forti](http://pages.di.unipi.it/forti/)
+- [Antonio Brogi](http://pages.di.unipi.it/brogi/)
