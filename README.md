@@ -35,7 +35,12 @@ By analysing differences in the application specification and in the monitored i
 - changes in the services' (software, hardware and IoT) requirements or in the service-service communication (latency and bandwidth) requirements, set in the application specification, that might trigger either the need for migrating one or more application services or for simply updating the current deployment information, and
 - addition or removal of services or of service-service communication requirements in the application specification.
 
-## Developers
+# Collaborate
+
+We look forward to contributions and suggestions on how to improve FogBrain!
+Feel free to drop us a message or a pull request.
+
+#### Developers & Contributors
 
 - [Stefano Forti](http://pages.di.unipi.it/forti/)
 - [Giuseppe Bisicchia](https://github.com/GBisi)
