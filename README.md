@@ -1,8 +1,7 @@
-<p><img align="left"  src="http://pages.di.unipi.it/forti/FogBrainX/img/logo.png" width="100"> <h1>FogBrainXX</h1></p>
-
-_continuous reasoning for managing next-gen Cloud-IoT applications in continuity with the CI/CD pipeline_
+<p><img align="left"  src="https://raw.githubusercontent.com/di-unipi-socc/fogbrainx/main/img/logo.png" width="300"> </p>
 
 <br></br>
+_continuous reasoning for managing next-gen Cloud-IoT applications in continuity with the CI/CD pipeline_
 
 FogBrainX methodology is described in the following article:
 
