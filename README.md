@@ -21,4 +21,9 @@ a :- b1, ... , bn.
 
 stating that `a` holds when `b1` and ... and `bn` holds, where `n >= 0` and `a`, `b1` ..., `bn` are atomic literals. Clauses with empty condition are also called *facts*. Prolog variables begin with upper-case letters, lists are denoted by square brackets, and negation by `\+`.
 
-Before using **FogBrainXX** you need to install the latest stable release of [SWI-Prolog](https://www.swi-prolog.org/download/stable).
+Before using **FogBrainX** you need to install the latest stable release of [SWI-Prolog](https://www.swi-prolog.org/download/stable).
+
+## Overview
+
+<p><img align="left"  src="https://raw.githubusercontent.com/di-unipi-socc/fogbrainx/main/img/functioning.png" width="850"> </p>
+
