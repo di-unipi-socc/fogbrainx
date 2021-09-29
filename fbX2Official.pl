@@ -10,9 +10,9 @@
 
 %:-consult('utilsX.pl').
 
-fogBrain(A,Placement) :- 
+fogBrainX(A,Placement) :- 
     \+ deployment(A,_,_), placement(A,Placement).
-fogBrain(A,NewPlacement) :-
+fogBrainX(A,NewPlacement) :-
     deployment(A,P,Alloc),
     newServices(P,NewServices),
     reasoningStep(P,Alloc,NotOkServices,[],OkPlacement), 
@@ -20,7 +20,7 @@ fogBrain(A,NewPlacement) :-
     placement(ServicesToPlace,OkPlacement,Alloc,NewPlacement),
     allocatedResources(NewPlacement,NewAlloc), 
     retract(deployment(A,_,_)), assert(deployment(A,NewPlacement,NewAlloc)).
-fogBrain(A, NewPlacement) :-
+fogBrainX(A, NewPlacement) :-
     deployment(A,_,Alloc),
     application(A, Services),
     placement(Services,[],Alloc,NewPlacement),
