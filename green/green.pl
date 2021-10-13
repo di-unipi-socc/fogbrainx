@@ -32,17 +32,18 @@ gFogBrain(A,P,Energy,Carbon) :-
 footprint(P,(AllocHW,AllocBW),Energy,Carbon) :-
     deploymentNodes(P,Nodes), 
     hardwareFootprint(Nodes,P,AllocHW,0,HWEnergy,0,HWCarbon),
-    networkFootprint(AllocBW,BWEnergy,BWCarbon),
+    networkFootprint(AllocBW,BWEnergy,BWCarbon), 
     Energy is HWEnergy + BWEnergy,
     Carbon is HWCarbon + BWCarbon.
 
 hardwareFootprint([(N,HW)|Ns],P,AllocHW,ECOld,ECNew,OldCarbon,NewCarbon) :-
     totHW(N,TotHW), pue(N,PUE), energySourceMix(N,Sources),
-    findall(H,member((N,H),AllocHW),HWs), sum_list(HWs,PHW),
     OldL is 100 * (TotHW - HW) / TotHW, energyProfile(N,OldL,OldE), 
+    findall(H,member((N,H),AllocHW),HWs), sum_list(HWs,PHW),
     NewL is 100 * (TotHW - HW + PHW) / TotHW, energyProfile(N,NewL,NewE), 
-    ETmp is ECOld + (NewE - OldE) * PUE, 
-    emissions(Sources,ETmp,OldCarbon,CarbonTmp),
+    EDiff is  (NewE - OldE) * PUE, emissions(Sources,EDiff,OldCarbon,CarbonTmp),
+    ETmp is ECOld + EDiff, 
+    %write(N), write(':'), Pippo is CarbonTmp - OldCarbon, writeln(Pippo),
     hardwareFootprint(Ns,P,AllocHW,ETmp,ECNew,CarbonTmp,NewCarbon).
 hardwareFootprint([],_,_,E,E,M,M).
 
