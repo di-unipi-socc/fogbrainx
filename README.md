@@ -7,7 +7,7 @@ FogBrainX methodology is described in the following article:
 
 > [Stefano Forti](http://pages.di.unipi.it/forti), [Giuseppe Bisicchia](), [Antonio Brogi](http://pages.di.unipi.it/brogi)<br>
 > [**Declarative Continuous Reasoning in the Cloud-IoT Continuum**](), <br>	
-> *Under revision*
+> *Journal of Logic and Computation (In Press)*
 
 If you wish to reuse source code in this repo, please consider citing it.
 
