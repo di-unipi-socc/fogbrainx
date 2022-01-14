@@ -37,7 +37,6 @@ hardwareFootprint([(N,HW)|Ns],AllocHW,Energy,Carbon) :-
     hardwareFootprint(Ns,AllocHW,EnergyNs,CarbonNs),
     hardwareEnergy(N,HW,AllocHW,EnergyN), 
     energySourceMix(N,Sources), hardwareEmissions(Sources,EnergyN,CarbonN),
-    %write(N), write(':'), writeln(CarbonN),
     Energy is EnergyN+EnergyNs, Carbon is CarbonN+CarbonNs.
 hardwareFootprint([],_,0,0).
 
