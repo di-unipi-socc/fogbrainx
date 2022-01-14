@@ -43,7 +43,6 @@ hardwareFootprint([(N,HW)|Ns],P,AllocHW,ECOld,ECNew,OldCarbon,NewCarbon) :-
     NewL is 100 * (TotHW - HW + PHW) / TotHW, energyProfile(N,NewL,NewE), 
     EDiff is  (NewE - OldE) * PUE, emissions(Sources,EDiff,OldCarbon,CarbonTmp),
     ETmp is ECOld + EDiff, 
-    %write(N), write(':'), Pippo is CarbonTmp - OldCarbon, writeln(Pippo),
     hardwareFootprint(Ns,P,AllocHW,ETmp,ECNew,CarbonTmp,NewCarbon).
 hardwareFootprint([],_,_,E,E,M,M).
 
