@@ -6,8 +6,8 @@ _continuous reasoning for managing next-gen Cloud-IoT applications in continuity
 FogBrainX methodology is described in the following article:
 
 > [Stefano Forti](http://pages.di.unipi.it/forti), [Giuseppe Bisicchia](), [Antonio Brogi](http://pages.di.unipi.it/brogi)<br>
-> [**Declarative Continuous Reasoning in the Cloud-IoT Continuum**](), <br>	
-> *Journal of Logic and Computation (In Press)*
+> [**Declarative Continuous Reasoning in the Cloud-IoT Continuum**](https://doi.org/10.1093/logcom/exab083), <br>	
+> *Journal of Logic and Computation (2022)*
 
 If you wish to reuse source code in this repo, please consider citing it.
 
