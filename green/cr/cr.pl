@@ -1,16 +1,11 @@
-:-consult('placer.pl').
-:-consult('gfogbrain.pl').
-:-dynamic deployment/3.
-:-dynamic application/2.
-:-dynamic service/4.
-:-dynamic s2s/4.
-:-dynamic link/4.
-:-dynamic node/4.
+:-['data.pl', 'placer.pl', 'gfogbrain.pl'].
 
-:-set_prolog_flag(stack_limit, 16 000 000 000).
+:- dynamic deployment/3.
+
+:-set_prolog_flag(stack_limit, 32 000 000 000).
 :-set_prolog_flag(last_call_optimisation, true).
 
-targetCarbon(1).
+targetCarbon(0.3).
 targetEnergy(1).
 
 fogBrainX(A,Placement) :- 
@@ -31,14 +26,14 @@ fogBrainX(A, NewPlacement) :-
     allocatedResources(NewPlacement,NewAlloc),
     retract(deployment(A,_,_)), assert(deployment(A,NewPlacement,NewAlloc)).
 
-reasoningStep([on(S,_)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
-    \+ service(S,_,_,_), 
+reasoningStep([on(S,_,V)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
+    \+ service(S,V,_,_,_), 
     reasoningStep(Ps,(AllocHW,AllocBW),KOs,POk,StableP).
-reasoningStep([on(S,N)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
-    nodeOk(S,N,POk,AllocHW), linksOk(S,N,POk,AllocBW), footprintOk([on(S,N)|POk],_), !,
-    reasoningStep(Ps,(AllocHW,AllocBW),KOs,[on(S,N)|POk],StableP).
-reasoningStep([on(S,_)|Ps],(AllocHW,AllocBW),[S|KOs],POk,StableP) :-
+reasoningStep([on(S,N,_)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
+    nodeOk(S,N,V1,POk,AllocHW), linksOk(S,N,V1,POk,AllocBW), footprintOk([on(S,N,V1)|POk],_), !,
+    reasoningStep(Ps,(AllocHW,AllocBW),KOs,[on(S,N,V1)|POk],StableP).
+reasoningStep([on(S,_,_)|Ps],(AllocHW,AllocBW),[S|KOs],POk,StableP) :-
     reasoningStep(Ps,(AllocHW,AllocBW),KOs,POk,StableP).
 reasoningStep([],_,[],P,P).
 
-newServices(P, NewServices) :- findall(S, (service(S,_,_,_), \+ member(on(S,_),P)), NewServices).
+newServices(P, NewServices) :- findall(S, distinct((service(S,_,_,_,_), \+ member(on(S,_,_),P))), NewServices).
