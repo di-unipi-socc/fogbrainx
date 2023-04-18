@@ -2,9 +2,9 @@ placement(A,P) :-
     application(A,Services), placement(Services,[],([],[]),P). 
 
 placement([S|Ss],P,(AllocHW,AllocBW),Placement) :-
-    nodeOk(S,N,V,P,AllocHW), linksOk(S,N,V,P,AllocBW), footprintOk([on(S,N,V)|P], _),
-    placement(Ss,[on(S,N,V)|P],(AllocHW,AllocBW),Placement).
-placement([],P,_,P). 
+    nodeOk(S,N,V,P,AllocHW), linksOk(S,N,V,P,AllocBW), footprintOk([on((S,V),N)|P], _),
+    placement(Ss,[on((S,V),N)|P],(AllocHW,AllocBW),Placement).
+placement([],P,_,RP) :- reverse(P, RP). 
 
 nodeOk(S,N,V,P,AllocHW) :-
     service(S,V,SWReqs,HWReqs,IoTReqs),
@@ -24,7 +24,7 @@ hwOk(N,HWCaps,HWReqs,P,AllocHW) :-
 
 linksOk(S,N,V,P,AllocBW) :-
     findall((N1N2,ReqLat), distinct(relevant(S,N,P,N1N2,ReqLat)), N2Ns), latencyOk(N2Ns),
-    findall(N1N2, distinct(member((N1N2,ReqLat),N2Ns)), N1N2s), bwOk(N1N2s, AllocBW, [on(S,N,V)|P]). 
+    findall(N1N2, distinct(member((N1N2,ReqLat),N2Ns)), N1N2s), bwOk(N1N2s, AllocBW, [on((S,V),N)|P]). 
 
 latencyOk([((N1,N2),ReqLat)|N2Ns]) :- 
     link(N1,N2,FeatLat,_), FeatLat =< ReqLat, latencyOk(N2Ns).
@@ -38,15 +38,15 @@ bwOk([(N1,N2)|N2Ns],AllocBW,P) :-
     bwOk(N2Ns,AllocBW,P).
 bwOk([],_,_).
 
-relevant(S,N,P,(N,N2),L) :- s2s(S,S2,L,_), member(on(S2,N2,_),P), dif(N,N2).
-relevant(S,N,P,(N1,N),L) :- s2s(S1,S,L,_), member(on(S1,N1,_),P), dif(N1,N).
+relevant(S,N,P,(N,N2),L) :- s2s(S,S2,L,_), member(on(S2,N2),P), dif(N,N2).
+relevant(S,N,P,(N1,N),L) :- s2s(S1,S,L,_), member(on(S1,N1),P), dif(N1,N).
 
-s2sOnN1N2((N1,N2),P,B) :- s2s(S3,S4,_,B), member(on(S3,N1,_),P), member(on(S4,N2,_),P).
+s2sOnN1N2((N1,N2),P,B) :- s2s(S3,S4,_,B), member(on(S3,N1),P), member(on(S4,N2),P).
 
 allocatedResources(P,(AllocHW,AllocBW)) :- 
-    findall((N,HW), (member(on(S,N,V),P), service(S,V,_,HW,_)), AllocHW),
+    findall((N,HW), (member(on((S,V),N),P), service(S,V,_,HW,_)), AllocHW),
     findall((N1,N2,BW), n2n(P,N1,N2,BW), AllocBW).
-n2n(P,N1,N2,ReqBW) :- s2s(S1,S2,_,ReqBW), member(on(S1,N1,_),P), member(on(S2,N2,_),P), dif(N1,N2).
+n2n(P,N1,N2,ReqBW) :- s2s(S1,S2,_,ReqBW), member(on((S1,_),N1),P), member(on((S2,_),N2),P), dif(N1,N2).
 
 footprintOk(P,Alloc) :-
     allocatedResources(P,Alloc), footprint(P,Alloc,Energy,Carbon), 

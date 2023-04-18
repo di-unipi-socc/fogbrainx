@@ -7,7 +7,7 @@ placements(A,Placements) :-
    findall((C,Cost,E,P), (gFogBrain(A,P,E,C), hourlyCost(P,Cost)), Ps),
    sort(Ps,Placements).
 
-hourlyCost([on(S,N,V)|P],NewCost) :- 
+hourlyCost([on((S,V),N)|P],NewCost) :- 
     hourlyCost(P,OldCost),
     service(S,V,_,HW,_), cost(N,C),
     NewCost is OldCost + C * HW.
@@ -48,4 +48,4 @@ networkFootprint(AllocBW,BWEnergy,BWCarbon) :-
     averageGCI(A), BWCarbon is A * BWEnergy.
 
 deploymentNodes(P,Nodes) :-     
-    findall((N,FreeHW), distinct( (member(on(_,N,_),P), node(N,_,FreeHW,_)) ), Nodes).
+    findall((N,FreeHW), distinct( (member(on(_,N),P), node(N,_,FreeHW,_)) ), Nodes).

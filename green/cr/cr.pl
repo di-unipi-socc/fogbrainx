@@ -26,14 +26,14 @@ fogBrainX(A, NewPlacement) :-
     allocatedResources(NewPlacement,NewAlloc),
     retract(deployment(A,_,_)), assert(deployment(A,NewPlacement,NewAlloc)).
 
-reasoningStep([on(S,_,V)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
+reasoningStep([on((S,V),_)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
     \+ service(S,V,_,_,_), 
     reasoningStep(Ps,(AllocHW,AllocBW),KOs,POk,StableP).
-reasoningStep([on(S,N,_)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
-    nodeOk(S,N,V,POk,AllocHW), linksOk(S,N,V,POk,AllocBW), footprintOk([on(S,N,V)|POk],_), !,
-    reasoningStep(Ps,(AllocHW,AllocBW),KOs,[on(S,N,V)|POk],StableP).
-reasoningStep([on(S,_,_)|Ps],(AllocHW,AllocBW),[S|KOs],POk,StableP) :-
+reasoningStep([on((S,_),N)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
+    nodeOk(S,N,V,POk,AllocHW), linksOk(S,N,V,POk,AllocBW), footprintOk([on((S,V),N)|POk],_), !,
+    reasoningStep(Ps,(AllocHW,AllocBW),KOs,[on((S,V),N)|POk],StableP).
+reasoningStep([on((S,_),_)|Ps],(AllocHW,AllocBW),[S|KOs],POk,StableP) :-
     reasoningStep(Ps,(AllocHW,AllocBW),KOs,POk,StableP).
 reasoningStep([],_,[],P,P).
 
-newServices(P, NewServices) :- findall(S, distinct((service(S,_,_,_,_), \+ member(on(S,_,_),P))), NewServices).
+newServices(P, NewServices) :- findall(S, distinct((service(S,_,_,_,_), \+ member(on((S,_),_),P))), NewServices).
