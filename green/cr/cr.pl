@@ -30,8 +30,8 @@ reasoningStep([on(S,_,V)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
     \+ service(S,V,_,_,_), 
     reasoningStep(Ps,(AllocHW,AllocBW),KOs,POk,StableP).
 reasoningStep([on(S,N,_)|Ps],(AllocHW,AllocBW),KOs,POk,StableP) :-
-    nodeOk(S,N,V1,POk,AllocHW), linksOk(S,N,V1,POk,AllocBW), footprintOk([on(S,N,V1)|POk],_), !,
-    reasoningStep(Ps,(AllocHW,AllocBW),KOs,[on(S,N,V1)|POk],StableP).
+    nodeOk(S,N,V,POk,AllocHW), linksOk(S,N,V,POk,AllocBW), footprintOk([on(S,N,V)|POk],_), !,
+    reasoningStep(Ps,(AllocHW,AllocBW),KOs,[on(S,N,V)|POk],StableP).
 reasoningStep([on(S,_,_)|Ps],(AllocHW,AllocBW),[S|KOs],POk,StableP) :-
     reasoningStep(Ps,(AllocHW,AllocBW),KOs,POk,StableP).
 reasoningStep([],_,[],P,P).
