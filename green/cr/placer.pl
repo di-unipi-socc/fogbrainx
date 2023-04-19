@@ -19,7 +19,7 @@ thingReqsOk(TReqs, TCaps) :- subset(TReqs, TCaps).
 
 hwOk(N,HWCaps,HWReqs,P,AllocHW) :-
     findall(HW,member((N,HW),AllocHW),HWs), sum_list(HWs, CurrAllocHW),
-    findall(HW, (member(on(S1,N,V),P), service(S1,V,_,HW,_)), OkHWs), sum_list(OkHWs, NewAllocHW),  
+    findall(HW, (member(on((S1,V),N),P), service(S1,V,_,HW,_)), OkHWs), sum_list(OkHWs, NewAllocHW),  
     hwTh(T), HWCaps >= HWReqs + T - CurrAllocHW + NewAllocHW.
 
 linksOk(S,N,V,P,AllocBW) :-
