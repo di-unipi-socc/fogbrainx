@@ -3,19 +3,11 @@ kWhPerMB(0.00008). % https://docs.microsoft.com/it-it/learn/modules/sustainable-
 
 % Consumption and CO2 model from: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6128960
 
-placements(A,Placements) :-
-   findall((C,Cost,E,P), (gFogBrain(A,P,E,C), hourlyCost(P,Cost)), Ps),
-   sort(Ps,Placements).
-
 hourlyCost([on((S,V),N)|P],NewCost) :- 
     hourlyCost(P,OldCost),
     service(S,V,_,HW,_), cost(N,C),
     NewCost is OldCost + C * HW.
 hourlyCost([],0).
-
-gFogBrain(A,P,Energy,CarbonEmissions) :- 
-    application(A,Services), placement(Services,[],([],[]),P),
-    allocatedResources(P,Alloc), footprint(P,Alloc,Energy,CarbonEmissions).
 
 footprint(P,(AllocHW,AllocBW),Energy,Carbon) :-
     deploymentNodes(P,Nodes), 

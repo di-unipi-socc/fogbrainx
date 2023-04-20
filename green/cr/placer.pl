@@ -1,10 +1,10 @@
-placement(A,P) :- 
-    application(A,Services), placement(Services,[],([],[]),P). 
+placement(A,P,R) :- 
+    application(A,Services), placement(Services,[],([],[]),[],R,P). 
 
-placement([S|Ss],P,(AllocHW,AllocBW),Placement) :-
-    nodeOk(S,N,V,P,AllocHW), linksOk(S,N,V,P,AllocBW), footprintOk([on((S,V),N)|P], _),
-    placement(Ss,[on((S,V),N)|P],(AllocHW,AllocBW),Placement).
-placement([],P,_,RP) :- reverse(P, RP). 
+placement([S|Ss],P,(AllocHW,AllocBW),R, Rates, Placement) :-
+    nodeOk(S,N,V,P,AllocHW), linksOk(S,N,[on((S,V),N)|P],AllocBW,R,TmpR), footprintOk([on((S,V),N)|P], R,_),
+    placement(Ss,[on((S,V),N)|P],(AllocHW,AllocBW),TmpR, Rates, Placement).
+placement([],P,_,R,R,RP) :- reverse(P, RP). 
 
 nodeOk(S,N,V,P,AllocHW) :-
     service(S,V,SWReqs,HWReqs,IoTReqs),
@@ -22,32 +22,29 @@ hwOk(N,HWCaps,HWReqs,P,AllocHW) :-
     findall(HW, (member(on((S1,V),N),P), service(S1,V,_,HW,_)), OkHWs), sum_list(OkHWs, NewAllocHW),  
     hwTh(T), HWCaps >= HWReqs + T - CurrAllocHW + NewAllocHW.
 
-linksOk(S,N,V,P,AllocBW) :-
-    findall((N1N2,ReqLat), distinct(relevant(S,N,P,N1N2,ReqLat)), N2Ns), latencyOk(N2Ns),
-    findall(N1N2, distinct(member((N1N2,ReqLat),N2Ns)), N1N2s), bwOk(N1N2s, AllocBW, [on((S,V),N)|P]). 
+linksOk(S,N,P,AllocBW,Rates,NewRates) :-
+    findall(norate(S1S2,N1N2), distinct(relevant(S,N,P,S1S2,N1N2)), NoRates),
+    qosOk(NoRates, P, AllocBW, Rates, NewRates).
 
-latencyOk([((N1,N2),ReqLat)|N2Ns]) :- 
-    link(N1,N2,FeatLat,_), FeatLat =< ReqLat, latencyOk(N2Ns).
-latencyOk([]).
-
-bwOk([(N1,N2)|N2Ns],AllocBW,P) :-
-    link(N1,N2,_,FeatBW),
+qosOk([norate((S1,S2),(N1,N2))|NoRates], P, AllocBW, Rates, NewRates) :-
+    s2s(S1,S2,R,ReqLat,_), link(N1,N2,FeatLat,FeatBW), bwTh(T),
     findall(BW, member((N1,N2,BW),AllocBW), BWs), sum_list(BWs, CurrAllocBW), 
-    findall(BW, s2sOnN1N2((N1,N2), P, BW), OkBWs), sum_list(OkBWs, OkAllocBw), 
-    bwTh(T), FeatBW  >=  OkAllocBw - CurrAllocBW + T, 
-    bwOk(N2Ns,AllocBW,P).
-bwOk([],_,_).
+    findall(BW, s2sOnN1N2((N1,N2), P, [(S1,S2,R)|Rates], BW), OkBWs), sum_list(OkBWs, OkAllocBw), 
+    FeatBW  >=  OkAllocBw - CurrAllocBW + T,
+    FeatLat =< ReqLat,
+    qosOk(NoRates,P,AllocBW,[(S1,S2,R)|Rates],NewRates).
+qosOk([],_,_,R,R).
 
-relevant(S,N,P,(N,N2),L) :- s2s(S,S2,L,_), member(on(S2,N2),P), dif(N,N2).
-relevant(S,N,P,(N1,N),L) :- s2s(S1,S,L,_), member(on(S1,N1),P), dif(N1,N).
+relevant(S,N,P,(S,S2),(N,N2)) :- s2s(S,S2,_,_,_), member(on((S2,_),N2),P), dif(N,N2).
+relevant(S,N,P,(S1,S),(N1,N)) :- s2s(S1,S,_,_,_), member(on((S1,_),N1),P), dif(N1,N).
 
-s2sOnN1N2((N1,N2),P,B) :- s2s(S3,S4,_,B), member(on(S3,N1),P), member(on(S4,N2),P).
+s2sOnN1N2((N1,N2),P,Rs,B) :- s2s(S3,S4,R,_,B), member((S3,S4,R),Rs), member(on(S3,N1),P), member(on(S4,N2),P).
 
-allocatedResources(P,(AllocHW,AllocBW)) :- 
+allocatedResources(P,R,(AllocHW,AllocBW)) :- 
     findall((N,HW), (member(on((S,V),N),P), service(S,V,_,HW,_)), AllocHW),
-    findall((N1,N2,BW), n2n(P,N1,N2,BW), AllocBW).
-n2n(P,N1,N2,ReqBW) :- s2s(S1,S2,_,ReqBW), member(on((S1,_),N1),P), member(on((S2,_),N2),P), dif(N1,N2).
+    findall((N1,N2,BW), n2n(P,R,N1,N2,BW), AllocBW).
+n2n(P,Rs,N1,N2,ReqBW) :- s2s(S1,S2,R,_,ReqBW), member((S1,S2,R),Rs), member(on((S1,_),N1),P), member(on((S2,_),N2),P), dif(N1,N2).
 
-footprintOk(P,Alloc) :-
-    allocatedResources(P,Alloc), footprint(P,Alloc,Energy,Carbon), 
+footprintOk(P,R,Alloc) :-
+    allocatedResources(P,R,Alloc), footprint(P,Alloc,Energy,Carbon), 
     targetCarbon(CarbonMax), Carbon =< CarbonMax, targetEnergy(EnergyMax), Energy =< EnergyMax.
