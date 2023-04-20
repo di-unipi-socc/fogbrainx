@@ -2,7 +2,7 @@ placement(A,P,R) :-
     application(A,Services), placement(Services,[],([],[]),[],R,P). 
 
 placement([S|Ss],P,(AllocHW,AllocBW),R, Rates, Placement) :-
-    nodeOk(S,N,V,P,AllocHW), linksOk(S,N,[on((S,V),N)|P],AllocBW,R,TmpR), footprintOk([on((S,V),N)|P], R,_),
+    nodeOk(S,N,V,P,AllocHW), linksOk(S,N,[on((S,V),N)|P],AllocBW,R,TmpR), footprintOk([on((S,V),N)|P], TmpR,_),
     placement(Ss,[on((S,V),N)|P],(AllocHW,AllocBW),TmpR, Rates, Placement).
 placement([],P,_,R,R,RP) :- reverse(P, RP). 
 
