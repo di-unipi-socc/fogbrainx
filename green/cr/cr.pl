@@ -5,7 +5,7 @@
 :-set_prolog_flag(stack_limit, 32 000 000 000).
 :-set_prolog_flag(last_call_optimisation, true).
 
-targetCarbon(0.15).
+targetCarbon(0.5).
 targetEnergy(1).
 
 fogBrainX(A,Placement,Rates) :- 
@@ -30,7 +30,6 @@ reasoningStep([on((S,V),_)|Ps],(AllocHW,AllocBW),KOs,ROk,StableR,POk,StableP) :-
     \+ service(S,V,_,_,_), 
     reasoningStep(Ps,(AllocHW,AllocBW),KOs,ROk,StableR,POk,StableP).
 reasoningStep([on((S,_),N)|Ps],(AllocHW,AllocBW),KOs,ROk,StableR,POk,StableP) :-
-    rankNodes(RankedNodes), member((_,N),RankedNodes),
     nodeOk(S,N,V,POk,AllocHW), linksOk(S,N,[on((S,V),N)|POk],AllocBW,ROk,TmpR), footprintOk([on((S,V),N)|POk],TmpR,_), !,
     reasoningStep(Ps,(AllocHW,AllocBW),KOs,TmpR,StableR,[on((S,V),N)|POk],StableP).
 reasoningStep([on((S,_),_)|Ps],(AllocHW,AllocBW),[S|KOs],ROk,StableR,POk,StableP) :-
