@@ -1,5 +1,5 @@
 placement(A,P,R) :- 
-    application(A,Services), placement(Services,[],([],[]),[],R,P). 
+    application(A,Services), placement(Services,[],([],[]),[],R,P).
 
 placement([S|Ss],P,(AllocHW,AllocBW),R, Rates, Placement) :-
     rankNodes(RankedNodes), member((_,N),RankedNodes),
@@ -32,10 +32,10 @@ hwOk(N,HWCaps,HWReqs,P,AllocHW) :-
     hwTh(T), HWCaps >= HWReqs + T - CurrAllocHW + NewAllocHW.
 
 linksOk(S,N,P,AllocBW,Rates,NewRates) :-
-    findall(norate(S1S2,N1N2), distinct(relevant(S,N,P,S1S2,N1N2)), NoRates),
+    findall(c(S1S2,N1N2), distinct(relevant(S,N,P,S1S2,N1N2)), NoRates),
     qosOk(NoRates, P, AllocBW, Rates, NewRates).
 
-qosOk([norate((S1,S2),(N1,N2))|NoRates], P, AllocBW, Rates, NewRates) :-
+qosOk([c((S1,S2),(N1,N2))|NoRates], P, AllocBW, Rates, NewRates) :-
     s2s(S1,S2,R,ReqLat,_), link(N1,N2,FeatLat,FeatBW), bwTh(T),
     findall(BW, member((N1,N2,BW),AllocBW), BWs), sum_list(BWs, CurrAllocBW), 
     findall(BW, s2sOnN1N2((N1,N2), P, [(S1,S2,R)|Rates], BW), OkBWs), sum_list(OkBWs, OkAllocBw), 

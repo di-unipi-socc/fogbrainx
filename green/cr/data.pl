@@ -14,6 +14,7 @@ application(lightsApp, [mlOptimiser, lightsDriver]).
 service(mlOptimiser, b, [mySQL, python, ubuntu], 16, [gpu]).
 service(mlOptimiser, m, [mySQL, python, ubuntu], 8, [gpu]).
 service(mlOptimiser, s, [mySQL, python, ubuntu], 4, [gpu]).
+
 service(lightsDriver, b, [ubuntu], 4, [videocamera, lightshub]).
 service(lightsDriver, m, [ubuntu], 2, [videocamera, lightshub]).
 service(lightsDriver, s, [ubuntu], 1, [videocamera, lightshub]).
@@ -21,6 +22,7 @@ service(lightsDriver, s, [ubuntu], 1, [videocamera, lightshub]).
 s2s(mlOptimiser, lightsDriver, high, 50, 0.5).
 s2s(mlOptimiser, lightsDriver, medium, 20, 0.2).
 s2s(mlOptimiser, lightsDriver, low, 10, 0.1).
+
 s2s(lightsDriver, mlOptimiser, high, 20, 16).
 s2s(lightsDriver, mlOptimiser, medium, 10, 8).
 s2s(lightsDriver, mlOptimiser, low, 5, 4).
