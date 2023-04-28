@@ -1,18 +1,23 @@
 :-['data.pl', 'placer.pl', 'gfogbrain.pl'].
 
 :- dynamic deployment/4.
+:- dynamic rankedNodes/1.
 
 :-set_prolog_flag(stack_limit, 32 000 000 000).
 :-set_prolog_flag(last_call_optimisation, true).
 
-targetCarbon(0.5).
+targetCarbon(1).
 targetEnergy(1).
 
-fogBrainX(A,Placement,Rates) :- 
+fogBrainX(A,Placement,Rates) :-
+    retractall(ranking(_)), rankNodes(RankedNodes), assert(ranking(RankedNodes)),
+    reason(A,Placement,Rates).
+
+reason(A,Placement,Rates) :- 
     \+ deployment(A,_,_,_), placement(A,Placement,Rates),
     allocatedResources(Placement,Rates,Alloc), 
     assert(deployment(A,Placement,Rates,Alloc)).
-fogBrainX(A,NewPlacement,NewRates) :-
+reason(A,NewPlacement,NewRates) :-
     deployment(A,P,_,Alloc),
     newServices(P,NewServices),
     reasoningStep(P,Alloc,NotOkServices,[],Rates,[],OkPlacement), 
@@ -20,7 +25,7 @@ fogBrainX(A,NewPlacement,NewRates) :-
     placement(ServicesToPlace,OkPlacement,Alloc,Rates,NewRates,NewPlacement),
     allocatedResources(NewPlacement,NewRates,NewAlloc),
     retract(deployment(A,_,_,_)), assert(deployment(A,NewPlacement,NewRates,NewAlloc)).
-fogBrainX(A, NewPlacement,NewRates) :-
+reason(A, NewPlacement,NewRates) :-
     deployment(A,_,_,Alloc), application(A, Services),
     placement(Services,[],Alloc,[],NewRates,NewPlacement),
     allocatedResources(NewPlacement,NewRates,NewAlloc),
