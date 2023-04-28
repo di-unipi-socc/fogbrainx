@@ -2,10 +2,13 @@ placement(A,P,R) :-
     application(A,Services), placement(Services,[],([],[]),[],R,P).
 
 placement([S|Ss],P,(AllocHW,AllocBW),R, Rates, Placement) :-
-    ranking(RankedNodes), member((_,N),RankedNodes),
+    candidateNode(N),
     nodeOk(S,N,V,P,AllocHW), linksOk(S,N,[on((S,V),N)|P],AllocBW,R,TmpR), footprintOk([on((S,V),N)|P], TmpR,_),
     placement(Ss,[on((S,V),N)|P],(AllocHW,AllocBW),TmpR, Rates, Placement).
 placement([],P,_,R,R,RP) :- reverse(P, RP). 
+
+candidateNode(N) :- 
+    (ranking(RankedNodes), member((_,N),RankedNodes) ); ( \+ranking(_), node(N,_,_,_) ).
 
 nodeOk(S,N,V,P,AllocHW) :-
     service(S,V,SWReqs,HWReqs,IoTReqs),

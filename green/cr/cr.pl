@@ -1,7 +1,7 @@
 :-['data.pl', 'placer.pl', 'gfogbrain.pl'].
 
 :- dynamic deployment/4.
-:- dynamic rankedNodes/1.
+:- dynamic ranking/1.
 
 :-set_prolog_flag(stack_limit, 32 000 000 000).
 :-set_prolog_flag(last_call_optimisation, true).
