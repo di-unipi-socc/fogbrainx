@@ -8,7 +8,7 @@ placement([S|Ss],P,(AllocHW,AllocBW),R, Rates, Placement) :-
 placement([],P,_,R,R,RP) :- reverse(P, RP). 
 
 candidateNode(N) :- 
-    (ranking(RankedNodes), member((_,N),RankedNodes) ); ( \+ranking(_), node(N,_,_,_) ).
+    ( ranking(RankedNodes), member((_,N),RankedNodes) ); ( \+ranking(_), node(N,_,_,_) ).
 
 nodeOk(S,N,V,P,AllocHW) :-
     service(S,V,SWReqs,HWReqs,IoTReqs),
