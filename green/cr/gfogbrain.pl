@@ -41,3 +41,11 @@ networkFootprint(AllocBW,BWEnergy,BWCarbon) :-
 
 deploymentNodes(P,Nodes) :-     
     findall((N,FreeHW), distinct( (member(on(_,N),P), node(N,_,FreeHW,_)) ), Nodes).
+
+rankNodes(RankedNodes):- findall(N, node(N,_,_,_), Ns), nodeEmissions(Ns, NFs), sort(NFs, RankedNodes).
+
+nodeEmissions([N|Ns], [(F,N)|NFs]) :- 
+    energySourceMix(N,Sources),
+    findall(E, (member((P,S),Sources), emissions(S, MU), E = P*MU), Es), sum_list(Es, F),
+    nodeEmissions(Ns,NFs).
+nodeEmissions([],[]).

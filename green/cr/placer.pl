@@ -7,14 +7,6 @@ placement([S|Ss],P,(AllocHW,AllocBW),R, Rates, Placement) :-
     placement(Ss,[on((S,V),N)|P],(AllocHW,AllocBW),TmpR, Rates, Placement).
 placement([],P,_,R,R,RP) :- reverse(P, RP). 
 
-rankNodes(RankedNodes):- findall(N, node(N,_,_,_), Ns), nodeEmissions(Ns, NFs), sort(NFs, RankedNodes).
-
-nodeEmissions([N|Ns], [(F,N)|NFs]) :- 
-    energySourceMix(N,Sources),
-    findall(E, (member((P,S),Sources), emissions(S, MU), E = P*MU), Es), sum_list(Es, F),
-    nodeEmissions(Ns,NFs).
-nodeEmissions([],[]).
-
 nodeOk(S,N,V,P,AllocHW) :-
     service(S,V,SWReqs,HWReqs,IoTReqs),
     node(N,SWCaps,HWCaps,IoTCaps),
