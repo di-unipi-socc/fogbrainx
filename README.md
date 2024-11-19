@@ -13,7 +13,7 @@ If you wish to reuse source code in this repo, please consider citing it.
 
 ## How-To
 
-The `main.py` demonstrates how to integrate Python with Prolog using the `swiplserver` library, which provides an interface to SWI-Prolog. The main goal is to load application and infrastructure configurations into Prolog and query for a placement result.
+The `main.py` script demonstrates how to integrate Python with Prolog using the `swiplserver` library, which provides an interface to SWI-Prolog. The main goal is to load application and infrastructure configurations into Prolog and query for a placement result.
 
 ### Prerequisites
 - Install [SWI-Prolog](https://www.swi-prolog.org/Download.html).
@@ -54,4 +54,4 @@ The `main.py` demonstrates how to integrate Python with Prolog using the `swipls
 ---
 
 ### Limitations
-- This program does not support the continuous reasoning behaviour of FogBrainX
+- The `main.py` script does not support the continuous reasoning behaviour of FogBrainX
