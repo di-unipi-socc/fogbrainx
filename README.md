@@ -1,49 +1,44 @@
-<p><img align="left"  src="https://raw.githubusercontent.com/di-unipi-socc/fogbrainx/main/img/logo.png" width="300"> </p>
+## How-To: Run Experiments with Prolog and Python Integration
 
-<br></br>
-_continuous reasoning for managing next-gen Cloud-IoT applications in continuity with the CI/CD pipeline_
+This script demonstrates how to integrate Python with Prolog using the `swiplserver` library, which provides an interface to SWI-Prolog. The main goal is to load application and infrastructure configurations into Prolog and query for a placement result.
 
-FogBrainX methodology is described in the following article:
+### Prerequisites
+- Install [SWI-Prolog](https://www.swi-prolog.org/Download.html).
+- Install the `swiplserver` Python package: 
+  ```bash
+  pip install swiplserver
+  ```
+- Clone the repository.
 
-> [Stefano Forti](http://pages.di.unipi.it/forti), [Giuseppe Bisicchia](http://pages.di.unipi.it/bisicchia), [Antonio Brogi](http://pages.di.unipi.it/brogi)<br>
-> [**Declarative Continuous Reasoning in the Cloud-IoT Continuum**](https://doi.org/10.1093/logcom/exab083), <br>	
-> *Journal of Logic and Computation (2022)*
+---
 
-If you wish to reuse source code in this repo, please consider citing it.
+### How to Use the Script
 
-## Background & Prerequisites
+1. **Purpose**:
+   The script takes two input arguments: an application Prolog file and an infrastructure Prolog file. It queries the Prolog knowledge base for a `placement/2` predicate.
 
-FogBrainX is written in Prolog. Prolog programs are finite sets of *clauses* of the form:
+2. **Arguments**:
+   Run the script using the following arguments:
+   - `-app`: Path to the application Prolog file.
+   - `-infra`: Path to the infrastructure Prolog file.
+   
+   Example:
+   ```bash
+   python main.py -app input/application.pl -infra input/infrastructure.pl
+   ```
 
-```prolog
-a :- b1, ... , bn.
-```
+3. **Output**:
+   - If no placement is found, outputs:
+     ```
+     No placement found
+     ```
+   - If a placement is found, prints:
+     ```
+     Found placement for '<Application>'
+     ```
+     Followed by a structured representation of the placement details.
 
-stating that `a` holds when `b1` and ... and `bn` holds, where `n >= 0` and `a`, `b1` ..., `bn` are atomic literals. Clauses with empty condition are also called *facts*. Prolog variables begin with upper-case letters, lists are denoted by square brackets, and negation by `\+`.
+---
 
-Before using **FogBrainX** you need to install the latest stable release of [SWI-Prolog](https://www.swi-prolog.org/download/stable).
-
-## Overview
-
-The picture below illustrates the bird's-eye view of FogBrainX.
-
-<div><img align="center"  src="https://raw.githubusercontent.com/di-unipi-socc/fogbrainx/main/img/functioning.png" width="850"></div>
-
-By analysing differences in the application specification and in the monitored infrastructure data, FogBrainX outputs management decisions on where to place application services by incrementally handling: 
-
-- changes in the infrastructure (i.e. node resources, network QoS) that trigger the need for migrating one or more application services,
-- changes in the services' (software, hardware and IoT) requirements or in the service-service communication (latency and bandwidth) requirements, set in the application specification, that might trigger either the need for migrating one or more application services or for simply updating the current deployment information, and
-- addition or removal of services or of service-service communication requirements in the application specification.
-
-# Collaborate
-
-We look forward to contributions and suggestions on how to improve FogBrainX!
-Feel free to drop us a message or a pull request.
-
-#### Developers & Contributors
-
-- [Stefano Forti](http://pages.di.unipi.it/forti/)
-- [Giuseppe Bisicchia](https://github.com/GBisi)
-- [Antonio Brogi](http://pages.di.unipi.it/brogi/)
-
-
+### Limitations
+- This program does not support the continuous reasoning behaviour of FogBrainX
