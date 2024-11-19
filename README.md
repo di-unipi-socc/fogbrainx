@@ -1,4 +1,4 @@
-## How-To: Run Experiments with Prolog and Python Integration
+## How-To
 
 This script demonstrates how to integrate Python with Prolog using the `swiplserver` library, which provides an interface to SWI-Prolog. The main goal is to load application and infrastructure configurations into Prolog and query for a placement result.
 
