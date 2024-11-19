@@ -13,7 +13,7 @@ If you wish to reuse source code in this repo, please consider citing it.
 
 ## How-To
 
-This script demonstrates how to integrate Python with Prolog using the `swiplserver` library, which provides an interface to SWI-Prolog. The main goal is to load application and infrastructure configurations into Prolog and query for a placement result.
+The `main.py` demonstrates how to integrate Python with Prolog using the `swiplserver` library, which provides an interface to SWI-Prolog. The main goal is to load application and infrastructure configurations into Prolog and query for a placement result.
 
 ### Prerequisites
 - Install [SWI-Prolog](https://www.swi-prolog.org/Download.html).
